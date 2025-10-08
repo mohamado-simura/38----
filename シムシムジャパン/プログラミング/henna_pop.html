@@ -1,0 +1,205 @@
+
+<!-- **コピーライト（著作権表示）（フリーパーツ）↑↑ -->
+
+<!-- ==== Glass Pop (Product-only, Left Middle, Responsive, skip self page) ==== -->
+<style>
+  .simura-pop-mini {
+    position: fixed; left: 12px; top: 50%; transform: translateY(-50%);
+    z-index: 9999;
+    width: min(88vw, 260px);   /* smaller max width */
+    background: rgba(255,255,255,.28);
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 12px;
+    padding: 8px 10px 10px;   /* tighter padding */
+    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+    display: none;
+    color: #1f2937;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", Meiryo, sans-serif;
+  }
+  .simura-pop-mini.is-open { display: block; }
+
+  .simura-pop-mini__x {
+    position: absolute; top: 6px; right: 6px;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 0; background: rgba(255,255,255,.9);
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    cursor: pointer; font-weight: 900; color: #111; font-size: 14px;
+  }
+
+  .simura-pop-mini__title { font-size: 0.95rem; font-weight: 700; margin: 0 30px 4px 0; }
+  .simura-pop-mini__img {
+    width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+    border-radius: 8px; background: rgba(255,255,255,.4); margin: 4px 0 8px;
+  }
+  .simura-pop-mini__desc { font-size: 0.85rem; line-height: 1.45; margin: 0 0 8px; color: #111827; }
+  .simura-pop-mini__link {
+    display: inline-block; text-decoration: none; font-weight: 600;
+    background: rgba(255,141,51,.95); color: #fff;
+    padding: 6px 10px; border-radius: 999px; font-size: 0.85rem;
+  }
+  .simura-pop-mini__link:hover { background: #e67e22; }
+
+  /* Mobile adjustments */
+  @media (max-width: 520px){
+    .simura-pop-mini{
+      left: 10px; right: 10px; bottom: 10px; top: auto; transform: none;
+      width: auto; padding: 10px;
+    }
+    .simura-pop-mini__title { font-size: 0.9rem; }
+    .simura-pop-mini__desc { font-size: 0.8rem; }
+  }
+</style>
+
+<div class="simura-pop-mini" id="simuraPopMini" role="dialog" aria-live="polite" aria-label="Promotion">
+  <button type="button" class="simura-pop-mini__x" aria-label="Close">×</button>
+  <h3 class="simura-pop-mini__title" id="spmTitle"></h3>
+  <img class="simura-pop-mini__img" id="spmImg" alt="">
+  <p class="simura-pop-mini__desc" id="spmDesc"></p>
+  <a class="simura-pop-mini__link" id="spmLink" href="#">View product</a>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========= Config ========= */
+  const PROMO = {
+    title: "SIMURAハーバルシャンプー300ｍＬーコンパクトサイズ！",
+    desc: "髪を優しく洗い上げる 洗浄成分 と、 ダメージ補修・保湿を叶える トリートメント級成分 が入っているから、 コンディショナーなしでもしっとりまとまる！",
+    img: "https://sesameoil.itembox.design/product/005/000000000542/000000000542-01-m.jpg?t=1757408138000",
+    url: "https://www.simsimjapan.com/c/headcare/gd542"
+  };
+
+  const STORAGE_KEY = "simuraPopMini:dismissed:v2";
+  const DEBUG = false; // set true to log reasons in console
+
+  // Product URL patterns used on your site (add/remove as needed)
+  const productPathRegexes = [
+    /\/c\/[^/]+\/gd\d+$/i,       // e.g. /c/headcare/gd542
+    /\/p\/\d+$/i,                // e.g. /p/12345
+    /\/products?\/[^/]+$/i       // e.g. /product/shampoo-300ml
+  ];
+
+  // Cart URL patterns (add your exact cart path if known, e.g. /f/cart)
+  const cartPathRegexes = [
+    /\/f\/cart(\/|$)/i,
+    /\/cart(\/|$)/i,
+    /\/shopping(cart)?(\/|$)/i,
+    /\/basket(\/|$)/i,
+    /\/checkout(\/|$)/i,
+    /\/order(\/|$)/i
+  ];
+  /* ========================== */
+
+  function log(){ if (DEBUG) console.info.apply(console, arguments); }
+
+  function normPath(u){
+    try { return new URL(u, location.origin).pathname.replace(/\/+$/,""); }
+    catch(e){
+      return String(u).replace(location.origin,"").split("?")[0].split("#")[0].replace(/\/+$/,"");
+    }
+  }
+
+  function isSelfPromoPage(){
+    const here = normPath(location.href);
+    const promo = normPath(PROMO.url);
+    const yes = here === promo;
+    log("selfPromo?", yes, {here, promo});
+    return yes;
+  }
+
+  function matchesAny(regexList, str){
+    for (const r of regexList){ if (r.test(str)) return true; }
+    return false;
+  }
+
+  function isProductPage(){
+    const path = location.pathname;
+    if (matchesAny(productPathRegexes, path)) { log("product by path"); return true; }
+
+    // DOM heuristics (backup)
+    if (document.querySelector('[itemtype*="schema.org/Product"], [itemscope][itemtype*="Product"]')) { log("product by schema.org"); return true; }
+    if (document.querySelector('meta[property="og:type"][content*="product"]')) { log("product by og:type"); return true; }
+
+    const body = document.body && document.body.className || "";
+    if (/(^|\s)(product|product-detail|item|detail)(\s|$)/i.test(body)) { log("product by body class"); return true; }
+
+    log("not product");
+    return false;
+  }
+
+  function isCartPage(){
+    const path = location.pathname.toLowerCase();
+    if (matchesAny(cartPathRegexes, path)) { log("cart by path"); return true; }
+
+    // DOM heuristics (backup, safe)
+    if (document.querySelector('[data-cart-page], [data-page-type="cart"], #cart, .shopping-cart, form[action*="cart"]')) { log("cart by DOM marker"); return true; }
+    const h = document.querySelector('h1, h2');
+    if (h && /カート|ショッピングカート/i.test(h.textContent)) { log("cart by heading text"); return true; }
+
+    log("not cart");
+    return false;
+  }
+
+  function openPop(){
+    const box = document.getElementById("simuraPopMini");
+    if (!box) { log("no box"); return; }
+
+    document.getElementById("spmTitle").textContent = PROMO.title;
+    document.getElementById("spmDesc").textContent  = PROMO.desc;
+    const imgEl = document.getElementById("spmImg");
+    imgEl.src = PROMO.img; imgEl.alt = PROMO.title;
+    document.getElementById("spmLink").href = PROMO.url;
+
+    box.classList.add("is-open");
+
+    const btnX = box.querySelector(".simura-pop-mini__x");
+    btnX.addEventListener("click", () => {
+      box.classList.remove("is-open");
+      try { localStorage.setItem(STORAGE_KEY, "1"); } catch(_) {}
+      log("dismissed via ×");
+    }, { once:true });
+
+    // Close current view only (no persistence)
+    document.addEventListener("keydown", (e)=>{
+      if (e.key === "Escape") { box.classList.remove("is-open"); log("closed via ESC"); }
+    }, { once:true });
+
+    document.addEventListener("click", (e)=>{
+      if (!box.classList.contains("is-open")) return;
+      if (!box.contains(e.target)) { box.classList.remove("is-open"); log("closed via outside click"); }
+    }, { once:true });
+  }
+
+  function init(){
+    if (isSelfPromoPage()) { log("skip: self promo page"); return; }
+
+    const onProduct = isProductPage();
+    const onCart    = isCartPage();
+
+    // Show ONLY on product pages or cart page
+    if (!onProduct && !onCart) { log("skip: not product/cart"); return; }
+
+    // Respect dismissal only on product pages
+    if (onProduct){
+      try {
+        if (localStorage.getItem(STORAGE_KEY) === "1") { log("skip: dismissed (product)"); return; }
+      } catch(_) {}
+    } else {
+      log("cart page: ignoring dismissal (always show)");
+    }
+
+    setTimeout(openPop, 800);
+  }
+
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init, { once:true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- ==== /Glass Pop ==== -->
