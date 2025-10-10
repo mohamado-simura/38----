@@ -1,0 +1,162 @@
+<!-- ==== Free Shipping Popup (Live Auto Update + Responsive Font Size) ==== -->
+<style>
+  .simura-free-pop {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%) translateY(100%);
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    padding: 16px 28px;
+    font-family: "Noto Sans JP", Meiryo, sans-serif;
+    color: #222;
+    font-weight: 600;
+    font-size: 2rem;  /* ✅ PC size */
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.6s ease;
+  }
+
+  .simura-free-pop.is-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .simura-free-pop__highlight {
+    color: #e67e22;
+    font-weight: 700;
+  }
+
+  .simura-free-pop__free {
+    color: #e60000;   /* bright red 送料無料 */
+    font-weight: 800;
+  }
+
+  /* ✅ Mobile font adjustments */
+  @media (max-width: 520px) {
+    .simura-free-pop {
+      width: 92%;
+      font-size: 1rem;  /* mobile size */
+      padding: 14px 18px;
+    }
+  }
+</style>
+
+<div class="simura-free-pop" id="simuraFreePop" aria-live="polite">
+  <span id="simuraFreePopMsg"></span>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const TARGET = 3980;
+  const POP_ID = "simuraFreePop";
+  const MSG_ID = "simuraFreePopMsg";
+
+  const cartPathRegexes = [
+    /\/f\/cart(\/|$)/i,
+    /\/cart(\/|$)/i,
+    /\/shopping(cart)?(\/|$)/i,
+    /\/basket(\/|$)/i
+  ];
+
+  function isCartPage(){
+    const path = location.pathname.toLowerCase();
+    for (const r of cartPathRegexes){ if (r.test(path)) return true; }
+    if (document.querySelector('h1,h2') && /カート|ショッピングカート/i.test(document.querySelector('h1,h2').textContent)) return true;
+    return false;
+  }
+
+  function extractNumber(text){
+    const cleaned = text.replace(/[^\d]/g, "");
+    const val = parseInt(cleaned, 10);
+    return isNaN(val) ? null : val;
+  }
+
+  function findCartTotal(){
+    const labelNodes = Array.from(document.querySelectorAll("body *"))
+      .filter(el => /合計|小計|計/i.test(el.textContent) && /[¥円\d]/.test(el.textContent));
+
+    let candidates = [];
+    labelNodes.forEach(el => {
+      const txt = el.textContent.replace(/\s+/g, "");
+      const match = txt.match(/(合計金額|小計|合計)[^¥円\d]*([¥]?\d[\d,]*)円?/);
+      if (match) {
+        const num = extractNumber(match[2]);
+        if (num && num > 0 && num < 200000) candidates.push(num);
+      }
+    });
+
+    if (candidates.length === 0) {
+      const totalEl = document.querySelector('[id*="total"], [class*="total"], [id*="sum"], [class*="sum"]');
+      if (totalEl) {
+        const match = totalEl.textContent.match(/(\d[\d,]*)/);
+        if (match) candidates.push(extractNumber(match[1]));
+      }
+    }
+
+    return candidates.length > 0 ? Math.max(...candidates) : null;
+  }
+
+  function showPop(diff){
+    const box = document.getElementById(POP_ID);
+    const msg = document.getElementById(MSG_ID);
+    if (!box || !msg) return;
+
+    msg.innerHTML = `あと <span class="simura-free-pop__highlight">¥${diff.toLocaleString()}</span> で <span class="simura-free-pop__free">送料無料</span> になります！`;
+    box.classList.add("is-show");
+  }
+
+  function hidePop(){
+    const box = document.getElementById(POP_ID);
+    if (box) box.classList.remove("is-show");
+  }
+
+  function updatePop(){
+    const total = findCartTotal();
+    if (!total) return hidePop();
+
+    if (total < TARGET){
+      const diff = TARGET - total;
+      showPop(diff);
+    } else {
+      hidePop();
+    }
+  }
+
+  function observeCartChanges(){
+    const targetNode = document.querySelector("body");
+    if (!targetNode) return;
+
+    const observer = new MutationObserver(() => {
+      updatePop();
+    });
+
+    observer.observe(targetNode, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  }
+
+  function init(){
+    if (!isCartPage()) return;
+    setTimeout(()=>{
+      updatePop();
+      observeCartChanges();
+    }, 1200);
+  }
+
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init, { once:true });
+  } else {
+    init();
+  }
+
+})();
+</script>
+<!-- ==== /Free Shipping Popup ==== -->
