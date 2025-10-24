@@ -1,11 +1,11 @@
-<!-- ==== Free Shipping Popup (Live Auto Update + Responsive Font Size) ==== -->
+<!-- ✅ SIMURA Free Shipping Popup (Visible Only on Cart Page) -->
 <style>
   .simura-free-pop {
     position: fixed;
     left: 50%;
     bottom: 20px;
     transform: translateX(-50%) translateY(100%);
-    background: rgba(255,255,255,0.97);
+    background: rgba(255, 255, 255, 0.97);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.5);
     border-radius: 14px;
@@ -14,7 +14,7 @@
     font-family: "Noto Sans JP", Meiryo, sans-serif;
     color: #222;
     font-weight: 600;
-    font-size: 2rem;  /* ✅ PC size */
+    font-size: 1.5rem;
     z-index: 9999;
     opacity: 0;
     transition: opacity 0.5s ease, transform 0.6s ease;
@@ -25,23 +25,34 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  .simura-free-pop__highlight {
-    color: #e67e22;
-    font-weight: 700;
-  }
+  .simura-free-pop__highlight { color: #e67e22; font-weight: 700; }
+  .simura-free-pop__free { color: #e60000; font-weight: 800; }
 
-  .simura-free-pop__free {
-    color: #e60000;   /* bright red 送料無料 */
-    font-weight: 800;
-  }
-
-  /* ✅ Mobile font adjustments */
   @media (max-width: 520px) {
     .simura-free-pop {
       width: 92%;
-      font-size: 1rem;  /* mobile size */
+      font-size: 1rem;
       padding: 14px 18px;
     }
+  }
+
+  /* 🎊 Confetti style */
+  .confetti {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 99999;
+    animation: fall 3.2s ease-out forwards;
+  }
+
+  @keyframes fall {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translate(var(--x), 100vh) rotate(720deg) scale(0.8); opacity: 0; }
   }
 </style>
 
@@ -56,18 +67,19 @@
   const TARGET = 3980;
   const POP_ID = "simuraFreePop";
   const MSG_ID = "simuraFreePopMsg";
+  let freeShown = false;
 
-  const cartPathRegexes = [
-    /\/f\/cart(\/|$)/i,
-    /\/cart(\/|$)/i,
-    /\/shopping(cart)?(\/|$)/i,
-    /\/basket(\/|$)/i
-  ];
-
+  // ✅ Detect if current page is a shopping cart page
   function isCartPage(){
     const path = location.pathname.toLowerCase();
-    for (const r of cartPathRegexes){ if (r.test(path)) return true; }
-    if (document.querySelector('h1,h2') && /カート|ショッピングカート/i.test(document.querySelector('h1,h2').textContent)) return true;
+    if (/cart|shopping|basket|checkout/.test(path)) return true;
+
+    const h1 = document.querySelector('h1,h2');
+    if (h1 && /カート|ショッピング|購入/.test(h1.textContent)) return true;
+
+    const title = document.title.toLowerCase();
+    if (/cart|shopping|basket|checkout|カート|ショッピング/.test(title)) return true;
+
     return false;
   }
 
@@ -106,14 +118,28 @@
     const box = document.getElementById(POP_ID);
     const msg = document.getElementById(MSG_ID);
     if (!box || !msg) return;
-
-    msg.innerHTML = `あと <span class="simura-free-pop__highlight">¥${diff.toLocaleString()}</span> で <span class="simura-free-pop__free">送料無料</span> になります！`;
+    msg.innerHTML = `あと <span class="simura-free-pop__highlight">¥${diff.toLocaleString()}</span> で <span class="simura-free-pop__free">送料無料</span>！`;
     box.classList.add("is-show");
   }
 
   function hidePop(){
     const box = document.getElementById(POP_ID);
     if (box) box.classList.remove("is-show");
+  }
+
+  function triggerConfetti(){
+    const colors = ["#FFD700","#FFA500","#FF4500","#FF69B4","#ADFF2F","#00BFFF"];
+    for (let i = 0; i < 70; i++) {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      confetti.style.left = `${50 + (Math.random() * 80 - 40)}%`;
+      confetti.style.width = `${Math.random() * 8 + 6}px`;
+      confetti.style.height = confetti.style.width;
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.setProperty("--x", `${Math.random() * 1000 - 500}px`);
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3200);
+    }
   }
 
   function updatePop(){
@@ -123,32 +149,36 @@
     if (total < TARGET){
       const diff = TARGET - total;
       showPop(diff);
+      freeShown = false;
     } else {
       hidePop();
+      if (!freeShown) {
+        triggerConfetti();
+        freeShown = true;
+      }
     }
   }
 
   function observeCartChanges(){
     const targetNode = document.querySelector("body");
     if (!targetNode) return;
-
-    const observer = new MutationObserver(() => {
-      updatePop();
-    });
-
-    observer.observe(targetNode, {
-      childList: true,
-      subtree: true,
-      characterData: true
-    });
+    const observer = new MutationObserver(updatePop);
+    observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
   }
 
   function init(){
-    if (!isCartPage()) return;
+    if (!isCartPage()) {
+      // 🧹 Not a cart page → remove popup completely
+      const pop = document.getElementById(POP_ID);
+      if (pop) pop.remove();
+      return;
+    }
+
+    // Only run on cart page
     setTimeout(()=>{
       updatePop();
       observeCartChanges();
-    }, 1200);
+    }, 1000);
   }
 
   if (document.readyState === "loading"){
@@ -159,4 +189,4 @@
 
 })();
 </script>
-<!-- ==== /Free Shipping Popup ==== -->
+<!-- ✅ END: Free Shipping Popup (Cart Page Only) -->
