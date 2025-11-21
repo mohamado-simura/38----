@@ -139,19 +139,18 @@ AIヘナカラーカウンセラー（日本語コメント付き）
 スクリプト（AI診断の動作ロジック）
 ================================ -->
 <script>
-// ① 使用量を計算する関数
+// 使用量を計算する関数
 function getPacketRecommendation(length, thickness) {
   var baseRange = "";
   if (length === "short") baseRange = "1~2パック(25g×1~2)";
   else if (length === "medium") baseRange = "約2パック(25g×2)";
   else if (length === "long") baseRange = "2~3パック(25g×2~3)";
-  // 髪の太さによる補正
   if (thickness === "thin" && length !== "short") baseRange += "(少なめでOK)";
   else if (thickness === "thick") baseRange += "(多めに準備を)";
   return baseRange;
 }
 
-// ② メインカラーに応じてブレンド内容を決定
+// ブレンド内容を決定（1度染め用）
 function getMixSuggestion(baseColor) {
   var mixData = {
     "ソフトブラック": { text: "ブラウンを混ぜると自然な艶が出ます。", ratio: "ソフトブラック8:ブラウン2" },
@@ -160,26 +159,41 @@ function getMixSuggestion(baseColor) {
     "オレンジブラウン": { text: "ブラウンを混ぜると落ち着いたトーンに。", ratio: "オレンジブラウン8:ブラウン2" },
     "オレンジまたはブラウン": { text: "インディゴを混ぜると自然な黒褐色になります。", ratio: "オレンジ6:インディゴ4" }
   };
-  // 登録されていない場合のデフォルトメッセージ
   return mixData[baseColor] || { text: "ブレンドで自分らしい色味を楽しみましょう！", ratio: "お好みで調整可" };
 }
 
-// ③ メイン関数：診断ボタン押下時の処理
+// 二度染め用（白髪多め・深みを出したい方向け）
+function getDoubleDyeSuggestion(baseColor) {
+  var doubleData = {
+    "オレンジまたはブラウン": {
+      step1: { text: "1回目は明るめのベース作りにオレンジ系を使用。", ratio: "オレンジ100%" },
+      step2: { text: "2回目にインディゴを重ねて深みをプラス。", ratio: "インディゴ100%" }
+    },
+    "ブラウン": {
+      step1: { text: "1回目はブラウンベースでトーンを整え、", ratio: "ブラウン100%" },
+      step2: { text: "2回目にソフトブラックを少し加えて艶感を調整。", ratio: "ソフトブラック7:ブラウン3" }
+    },
+    "ソフトブラック": {
+      step1: { text: "1回目はブラウンで明るさを整え、", ratio: "ブラウン100%" },
+      step2: { text: "2回目にソフトブラックで深みを出す。", ratio: "ソフトブラック100%" }
+    }
+  };
+  return doubleData[baseColor] || null;
+}
+
+// メイン診断
 function recommendHenna() {
-  // 入力値の取得
   var age = parseInt(document.getElementById("age").value);
   var length = document.getElementById("length").value;
   var type = document.getElementById("type").value;
   var thickness = document.getElementById("thickness").value;
   var resultLine = document.getElementById("resultLine");
 
-  // 入力チェック
   if (!age || !length || !type || !thickness) {
     alert("すべての項目を入力してください。");
     return;
   }
 
-  // 髪色に基づいて基本カラーを決定
   var baseColor = "";
   if (type === "black") baseColor = "ソフトブラック";
   else if (type === "softblack") baseColor = "ダークブラウン";
@@ -187,26 +201,28 @@ function recommendHenna() {
   else if (type === "darkbrown") baseColor = "オレンジブラウン";
   else if (type === "gray") baseColor = "オレンジまたはブラウン";
 
-  // ブレンド情報を取得
   var mixResult = getMixSuggestion(baseColor);
-
-  // 使用量を計算
+  var doubleResult = getDoubleDyeSuggestion(baseColor);
   var usage = getPacketRecommendation(length, thickness);
 
-  // 表示メッセージを複数パターンからランダムに選択
-  var messages = [
-    "おすすめカラーは「" + baseColor + "」。" + mixResult.text + " 配合比率の目安は " + mixResult.ratio + "。使用量は " + usage + "。",
-    "診断結果：「" + baseColor + "」が最適です。" + mixResult.text + " 比率: " + mixResult.ratio + "。目安は " + usage + "。",
-    "あなたの髪には「" + baseColor + "」がぴったり。" + mixResult.text + " 配合は " + mixResult.ratio + "。使用量は " + usage + "。",
-    "最適カラー：「" + baseColor + "」。" + mixResult.text + " 推奨ブレンド比率 " + mixResult.ratio + "。目安は " + usage + "です。"
-  ];
-  var message = messages[Math.floor(Math.random() * messages.length)];
-
-  // 「…」アニメーション表示後、結果を出す
   resultLine.hidden = false;
   resultLine.innerHTML = '<span class="typing"><span>.</span><span>.</span><span>.</span></span>';
+
   setTimeout(function() {
-    resultLine.textContent = message;
+    let html = "<b>🌿診断結果：</b><br>" +
+      "おすすめカラーは「" + baseColor + "」。<br>" +
+      mixResult.text + "<br>" +
+      "配合比率の目安：<b>" + mixResult.ratio + "</b><br>" +
+      "使用量の目安：" + usage + "<br><br>";
+
+    if (doubleResult) {
+      html += "<b>💡二度染めをしたい方へ：</b><br>" +
+        "1回目：" + doubleResult.step1.text + "（" + doubleResult.step1.ratio + "）<br>" +
+        "2回目：" + doubleResult.step2.text + "（" + doubleResult.step2.ratio + "）<br>" +
+        "※2回目は髪をしっかり乾かしてから染めると発色がより安定します。";
+    }
+
+    resultLine.innerHTML = html;
   }, 1000);
 }
 </script>
