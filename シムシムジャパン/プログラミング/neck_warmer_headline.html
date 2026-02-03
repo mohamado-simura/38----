@@ -1,0 +1,53 @@
+<!-- 送料無料キャンペーン ニュースティッカー -->
+<div id="simsim-news-ticker">
+  <a href="https://www.simsimjapan.com/c/gd396" target="_blank">
+    <div class="simsim-scroll">
+      <div class="simsim-text">
+        <span>【新発売】あっためやネックウォーマー登場！</span>
+        <span>首もとをじんわり温めて、全身ぽかぽかリラックス。</span>
+        <span>約45℃で2〜3時間のやさしい温かさをキープ！</span>
+        <span>【新発売】あっためやネックウォーマー登場！</span>
+        <span>首もとをじんわり温めて、全身ぽかぽかリラックス。</span>
+        <span>約45℃で2〜3時間のやさしい温かさをキープ！</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+<style>
+/* ニュースティッカー専用スタイル（他のCSSへ影響しません） */
+#simsim-news-ticker {
+  overflow: hidden;
+  background-color: #fff8f0;
+  font-family: "M PLUS 1p", sans-serif;
+  padding: 10px 0;
+}
+
+#simsim-news-ticker .simsim-scroll {
+  display: flex;
+  width: 100%;
+}
+
+#simsim-news-ticker .simsim-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 1.5em; /* 少し大きめに調整 */
+  font-weight: bold;
+  animation: simsim-scroll-animate 40s linear infinite;
+  color: #333;
+}
+
+#simsim-news-ticker .simsim-text span {
+  color: #f6863f;
+  margin-right: 2em;
+}
+
+@keyframes simsim-scroll-animate {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+</style>
