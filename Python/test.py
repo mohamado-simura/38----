@@ -32,3 +32,8 @@ txt="assaduzzaman is not a intilligent boy "
 print("intilligent" in txt)
 if"brilliant"not in txt:
     print("sorry to say he is dumb")
+#format string 
+price=49
+x="you broke the into 2 pices!"
+txt=f"the price of the car was {price} dollars."
+print(txt+" "+x)
