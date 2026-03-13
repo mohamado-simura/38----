@@ -38,10 +38,14 @@ x="you broke the into 2 pices!"
 txt=f"the price of the car was {price} dollars."
 print(txt+" "+x)
 #boolean 
-a=10
+a=15
 b=15
-if a>b:
+if a<b:
     print("are you blind or what ? a is smaller than b")
+elif a==b:
+    print("i am really confused")
 else:
     print("you are really blind bro")
     print(15%4)
+
+

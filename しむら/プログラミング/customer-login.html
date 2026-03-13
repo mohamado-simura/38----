@@ -1,0 +1,269 @@
+<!-- ==========================================================
+  LOGIN PAGE (Paste into WordPress > Page "customer-login"
+  Use a Custom HTML block)
+  NOTES:
+  - This code is scoped to #custLogin, so it won't affect other pages.
+  - Uses sessionStorage so user must login again after closing tab/browser.
+  - Change ONLY the sections marked "CHANGE HERE".
+========================================================== -->
+<div id="custLogin">
+  <style>
+    /* =========================
+       BASIC LAYOUT (safe scope)
+       ========================= */
+    #custLogin{
+      background:#fff;              /* White background (CHANGE HERE if needed) */
+      position:relative;
+      overflow:hidden;
+      padding:40px 16px;
+      min-height:80vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* ==========================================================
+       PEARLS (MORE VISIBLE)
+       - Increased contrast, stronger highlight, stronger shadow
+       - Slight "pearl tint" for visibility on white background
+       CHANGE HERE: sizes/positions/opacity if you want
+    ========================================================== */
+    #custLogin .pearl{
+      position:absolute;
+
+      /* Medium pearl default size (CHANGE HERE) */
+      width:120px;
+      height:120px;
+
+      border-radius:50%;
+
+      /* More visible pearl look */
+      background:
+        /* bright highlight */
+        radial-gradient(circle at 28% 24%,
+          rgba(255,255,255,1) 0%,
+          rgba(255,255,255,0.98) 18%,
+          rgba(245,245,245,0.92) 28%,
+          rgba(230,230,230,0.70) 45%,
+          rgba(210,210,210,0.35) 62%,
+          rgba(255,255,255,0) 78%),
+
+        /* subtle pearl tint ring (helps visibility) */
+        radial-gradient(circle at 55% 55%,
+          rgba(210,235,255,0.22) 0%,
+          rgba(255,220,240,0.14) 35%,
+          rgba(255,255,255,0) 70%);
+
+      /* Stronger shadow + inner shine (more visible) */
+      box-shadow:
+        0 20px 45px rgba(0,0,0,0.14),
+        0 0 0 1px rgba(0,0,0,0.06),
+        inset 0 16px 26px rgba(255,255,255,0.95),
+        inset 0 -18px 26px rgba(0,0,0,0.07);
+
+      opacity:0.92;                 /* CHANGE HERE: pearl visibility */
+      animation: custFloat 10s ease-in-out infinite;
+      pointer-events:none;
+    }
+
+    /* Pearl positions & individual sizes (CHANGE HERE) */
+    #custLogin .p1{ left:28px; top:84px;  width:140px; height:140px; animation-delay:0s; }
+    #custLogin .p2{ right:44px; top:52px; width:115px; height:115px; animation-delay:1.8s; }
+    #custLogin .p3{ left:12%; bottom:68px; width:125px; height:125px; animation-delay:3.2s; opacity:0.88; }
+    #custLogin .p4{ right:18%; bottom:24%; width:100px; height:100px; animation-delay:4.6s; opacity:0.85; }
+    #custLogin .p5{ left:58%; top:22%; width:90px; height:90px; animation-delay:2.4s; opacity:0.82; }
+
+    /* Extra shimmer sweep (more visible) */
+    #custLogin .shimmer{
+      position:absolute;
+      inset:-40%;
+
+      /* CHANGE HERE: adjust shimmer visibility */
+      background: linear-gradient(120deg,
+        rgba(255,255,255,0) 36%,
+        rgba(240,240,240,0.90) 50%,
+        rgba(255,255,255,0) 64%);
+
+      transform: translateX(-40%) rotate(8deg);
+      animation: custShimmer 6.8s linear infinite;
+      opacity:0.50;
+      pointer-events:none;
+    }
+
+    @keyframes custFloat{
+      0%   { transform: translate(0,0) scale(1); }
+      50%  { transform: translate(14px,-12px) scale(1.04); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    @keyframes custShimmer{
+      0%   { transform: translateX(-45%) rotate(8deg); }
+      100% { transform: translateX(45%) rotate(8deg); }
+    }
+
+    /* =========================
+       LOGIN CARD
+       ========================= */
+    #custLogin .card{
+      width:min(520px, 92vw);
+      background: rgba(255,255,255,0.95);
+      border:1px solid rgba(0,0,0,0.10);
+      border-radius:18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+      position:relative;
+      z-index:2;
+      text-align:center;
+      padding:34px 26px 28px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* =========================
+       "LOGO" TEXT (CHANGE HERE)
+       ========================= */
+    #custLogin .textLogo{
+      font-weight:900;
+      letter-spacing:3px;
+      font-size:28px;
+      margin-bottom:10px;
+      line-height:1;
+    }
+    #custLogin .textLogo small{
+      display:block;
+      font-size:11px;
+      letter-spacing:2px;
+      font-weight:800;
+      margin-top:6px;
+      color:#555;
+    }
+
+    /* Headings */
+    #custLogin .title{ font-size:20px; margin:10px 0 6px; }
+    #custLogin .sub{ font-size:12px; letter-spacing:1px; font-weight:800; margin:0 0 10px; color:#333; }
+    #custLogin .desc{ color:#666; margin:0 0 16px; font-size:14px; line-height:1.6; }
+
+    /* Inputs */
+    #custLogin .field{ text-align:left; margin:12px auto; max-width:360px; }
+    #custLogin label{ display:block; font-weight:800; font-size:12px; margin-bottom:6px; letter-spacing:1px; }
+    #custLogin input{
+      width:100%;
+      padding:12px;
+      border:1px solid rgba(0,0,0,0.25);
+      border-radius:12px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+    #custLogin input:focus{
+      border-color: rgba(0,0,0,0.55);
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+    }
+
+    /* Button */
+    #custLogin button{
+      width:360px;
+      max-width:100%;
+      padding:12px;
+      border:1px solid #111;
+      background:#111;
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:10px;
+      border-radius:12px;
+    }
+    #custLogin button:hover{ opacity:0.92; }
+
+    /* Error message */
+    #custLogin .err{
+      color:#b00020;
+      margin-top:12px;
+      min-height:18px;
+      font-size:14px;
+    }
+  </style>
+
+  <!-- Pearl background elements -->
+  <div class="pearl p1"></div>
+  <div class="pearl p2"></div>
+  <div class="pearl p3"></div>
+  <div class="pearl p4"></div>
+  <div class="pearl p5"></div>
+  <div class="shimmer"></div>
+
+  <div class="card">
+    <!-- =========================
+         CHANGE HERE: Your text logo
+         ========================= -->
+    <div class="textLogo">
+      株式会社しむら
+      <small>SIMURA Co.Ltd.</small>
+    </div>
+
+    <div class="title">お取引先様専用 ログインページ</div>
+    <div class="sub">CUSTOMER EXCLUSIVE PAGE</div>
+    <div class="desc">いつも大変お世話になっております。<br>
+当ページ内にて、弊社お取扱い商材の 企画書及び販促POPが、<br> PDFまたはエクセルにて ダウンロードいただけます。
+
+</div>
+
+    <form id="custLoginForm">
+      <div class="field">
+        <label for="custUid">USER ID</label>
+        <input id="custUid" type="text" autocomplete="username" required>
+      </div>
+
+      <div class="field">
+        <label for="custPw">PASS</label>
+        <input id="custPw" type="password" autocomplete="current-password" required>
+      </div>
+
+      <button type="submit">LOGIN</button>
+      <div class="err" id="custMsg"></div>
+    </form>
+  </div>
+
+  <script>
+    (function(){
+      /* =============================================
+         CHANGE HERE: Set your WordPress page slugs
+         Example:
+           /customer-login/
+           /customer-downloads/
+      ============================================= */
+      const DOWNLOADS_URL = window.location.origin + "/customer-downloads/";
+
+      /* =============================================
+         CHANGE HERE: Add / edit customer credentials
+         IMPORTANT: Front-end JS login is not secure.
+      ============================================= */
+      const USERS = [
+        { id: "simura", pass: "1823" },
+        { id: "customer2", pass: "abcd" }
+      ];
+
+      // Handle login submit
+      document.getElementById("custLoginForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        const uid = document.getElementById("custUid").value.trim();
+        const pw  = document.getElementById("custPw").value;
+
+        const ok = USERS.some(u => u.id === uid && u.pass === pw);
+
+        if (!ok) {
+          document.getElementById("custMsg").textContent = "User ID or Password is incorrect.";
+          return;
+        }
+
+        /* =============================================
+           SESSION LOGIN (must login again after exit)
+           - sessionStorage clears when tab/browser closes
+        ============================================= */
+        sessionStorage.setItem("customerLoggedIn", "yes");
+        sessionStorage.setItem("customerUserId", uid);
+
+        window.location.replace(DOWNLOADS_URL);
+      });
+    })();
+  </script>
+</div>
