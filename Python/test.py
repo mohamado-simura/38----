@@ -48,4 +48,21 @@ else:
     print("you are really blind bro")
     print(15%4)
 
+# python a list .sort() use for sort the list in alpabetical order
+thislist=["apple","cherry","mango","kiwi","pear"]
+thislist.sort()
+print(thislist)
 
+# reverse =true method
+thislist=["apple","cherry","mango","kiwi","pear"]
+thislist.sort(reverse=True)
+print(thislist)
+
+# tuple method 
+thistuple=("apple","orange","cherry","mango","kiwi")
+
+if "starwberry" in thistuple:
+    print("i will definitley eat starwberry")
+
+else:
+    print("Who eat my starwberry ?")
