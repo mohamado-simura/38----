@@ -32,3 +32,37 @@ txt="assaduzzaman is not a intilligent boy "
 print("intilligent" in txt)
 if"brilliant"not in txt:
     print("sorry to say he is dumb")
+#format string 
+price=49
+x="you broke the into 2 pices!"
+txt=f"the price of the car was {price} dollars."
+print(txt+" "+x)
+#boolean 
+a=15
+b=15
+if a<b:
+    print("are you blind or what ? a is smaller than b")
+elif a==b:
+    print("i am really confused")
+else:
+    print("you are really blind bro")
+    print(15%4)
+
+# python a list .sort() use for sort the list in alpabetical order
+thislist=["apple","cherry","mango","kiwi","pear"]
+thislist.sort()
+print(thislist)
+
+# reverse =true method
+thislist=["apple","cherry","mango","kiwi","pear"]
+thislist.sort(reverse=True)
+print(thislist)
+
+# tuple method 
+thistuple=("apple","orange","cherry","mango","kiwi")
+
+if "starwberry" in thistuple:
+    print("i will definitley eat starwberry")
+
+else:
+    print("Who eat my starwberry ?")
