@@ -44,7 +44,7 @@
 	font-weight: bold;
 	background: #f5f5f5;
 }
-</style>
+</style> 
 
 <div id="wrapper" class="clearfix">
 
