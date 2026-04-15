@@ -1,0 +1,321 @@
+<div id="dog-scene" aria-hidden="true">
+  <div class="bone"></div>
+  <div class="dog-wrap">
+    <div class="ground-shadow"></div>
+    <img class="dog" src="/ラブラブジャパン/画像データ/shampoo&conditioner/download.png" alt="">
+  </div>
+  <div class="mouth-bone"></div>
+</div>
+
+<style>
+#dog-scene{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:99999;
+}
+
+#dog-scene .dog-wrap{
+  position:absolute;
+  left:-160px;
+  top:120px;
+  width:110px;
+  opacity:0;
+  transform-origin:center bottom;
+  will-change:left, top, transform, opacity;
+}
+
+#dog-scene .dog{
+  display:block;
+  width:100%;
+  height:auto;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.18));
+}
+
+#dog-scene .ground-shadow{
+  position:absolute;
+  left:18px;
+  top:88px;
+  width:72px;
+  height:10px;
+  background:rgba(0,0,0,.16);
+  border-radius:50%;
+  filter:blur(2px);
+}
+
+#dog-scene .bone{
+  position:absolute;
+  left:68%;
+  top:155px;
+  width:62px;
+  height:18px;
+  opacity:0;
+  transform:translateY(8px) rotate(-8deg);
+  border-radius:14px;
+  background:linear-gradient(180deg, #fffef9 0%, #f4eee3 48%, #e7dcc6 100%);
+  border:1px solid rgba(90,72,44,.45);
+  box-shadow:
+    0 8px 16px rgba(0,0,0,.12),
+    inset 0 2px 0 rgba(255,255,255,.85),
+    inset 0 -2px 2px rgba(122,96,52,.18);
+}
+
+#dog-scene .bone:before,
+#dog-scene .bone:after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:18px;
+  height:18px;
+  transform:translateY(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fffef9 0%, #f2ead9 58%, #ddcfb0 100%);
+  border:1px solid rgba(90,72,44,.45);
+}
+
+#dog-scene .bone:before{
+  left:-10px;
+  box-shadow:-7px -5px 0 0 #fffaf0, -7px 5px 0 0 #efe4cf;
+}
+
+#dog-scene .bone:after{
+  right:-10px;
+  box-shadow:7px -5px 0 0 #fffaf0, 7px 5px 0 0 #efe4cf;
+}
+
+#dog-scene .mouth-bone{
+  position:fixed;
+  width:38px;
+  height:12px;
+  opacity:0;
+  border-radius:10px;
+  background:linear-gradient(180deg, #fffef9 0%, #f4eee3 48%, #e7dcc6 100%);
+  border:1px solid rgba(90,72,44,.45);
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+#dog-scene .mouth-bone:before,
+#dog-scene .mouth-bone:after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:12px;
+  height:12px;
+  transform:translateY(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fffef9 0%, #f2ead9 58%, #ddcfb0 100%);
+  border:1px solid rgba(90,72,44,.45);
+}
+
+#dog-scene .mouth-bone:before{
+  left:-7px;
+}
+
+#dog-scene .mouth-bone:after{
+  right:-7px;
+}
+
+#dog-scene.show-bone .bone{
+  animation:boneIn .45s ease forwards;
+}
+
+#dog-scene.enter .dog-wrap{
+  animation:dogEnter 1.9s cubic-bezier(.25,.7,.2,1) forwards;
+}
+
+#dog-scene.sit .dog-wrap{
+  left:calc(68% - 120px);
+  top:120px;
+  opacity:1;
+  animation:sitPulse 1.2s ease-in-out forwards;
+}
+
+#dog-scene.sniff .dog-wrap{
+  left:calc(68% - 120px);
+  top:120px;
+  opacity:1;
+  animation:sniffMove .42s ease-in-out 4;
+}
+
+#dog-scene.grab .bone{
+  opacity:0;
+  transition:opacity .12s linear;
+}
+
+#dog-scene.grab .mouth-bone{
+  opacity:1;
+}
+
+#dog-scene.exit .dog-wrap{
+  animation:dogExit 1.55s cubic-bezier(.55,.08,.68,.2) forwards;
+}
+
+@keyframes boneIn{
+  from{opacity:0; transform:translateY(8px) rotate(-8deg) scale(.92);}
+  to{opacity:1; transform:translateY(0) rotate(-8deg) scale(1);}
+}
+
+@keyframes dogEnter{
+  0%{
+    left:-160px;
+    top:120px;
+    opacity:0;
+    transform:translateY(0) scale(.96);
+  }
+  14%{
+    opacity:1;
+  }
+  100%{
+    left:calc(68% - 120px);
+    top:120px;
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+@keyframes sitPulse{
+  0%{ transform:translateY(0) scale(1); }
+  35%{ transform:translateY(3px) scale(.98,1.02); }
+  100%{ transform:translateY(0) scale(1); }
+}
+
+@keyframes sniffMove{
+  0%,100%{ transform:translateX(0) translateY(0) rotate(0deg); }
+  20%{ transform:translateX(4px) translateY(1px) rotate(1deg); }
+  50%{ transform:translateX(8px) translateY(-1px) rotate(-1deg); }
+  80%{ transform:translateX(4px) translateY(0) rotate(.6deg); }
+}
+
+@keyframes dogExit{
+  0%{
+    left:calc(68% - 120px);
+    top:120px;
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+  100%{
+    left:110%;
+    top:95px;
+    opacity:0;
+    transform:translateY(-20px) scale(.98);
+  }
+}
+
+@media (max-width: 768px){
+  #dog-scene .dog-wrap{
+    width:85px;
+    top:145px;
+  }
+
+  #dog-scene .ground-shadow{
+    width:56px;
+    top:68px;
+  }
+
+  #dog-scene .bone{
+    left:72%;
+    top:168px;
+    width:52px;
+    height:14px;
+  }
+
+  @keyframes dogEnter{
+    0%{
+      left:-120px;
+      top:145px;
+      opacity:0;
+      transform:translateY(0) scale(.96);
+    }
+    14%{
+      opacity:1;
+    }
+    100%{
+      left:calc(72% - 95px);
+      top:145px;
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+  }
+
+  @keyframes dogExit{
+    0%{
+      left:calc(72% - 95px);
+      top:145px;
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+    100%{
+      left:110%;
+      top:120px;
+      opacity:0;
+      transform:translateY(-14px) scale(.98);
+    }
+  }
+
+  #dog-scene.sit .dog-wrap,
+  #dog-scene.sniff .dog-wrap{
+    left:calc(72% - 95px);
+    top:145px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const scene = document.getElementById('dog-scene');
+  const dogWrap = scene.querySelector('.dog-wrap');
+  const mouthBone = scene.querySelector('.mouth-bone');
+  const dogImg = scene.querySelector('.dog');
+
+  dogImg.addEventListener('error', function () {
+    console.log('Dog image URL is wrong.');
+  });
+
+  function placeBoneAtMouth() {
+    const rect = dogWrap.getBoundingClientRect();
+    mouthBone.style.left = (rect.left + rect.width * 0.70) + 'px';
+    mouthBone.style.top  = (rect.top + rect.height * 0.52) + 'px';
+    mouthBone.style.transform = 'rotate(-8deg)';
+  }
+
+  function followMouth(durationMs) {
+    const end = performance.now() + durationMs;
+    function tick() {
+      placeBoneAtMouth();
+      if (performance.now() < end) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  setTimeout(() => scene.classList.add('show-bone'), 300);
+  setTimeout(() => scene.classList.add('enter'), 2000);
+
+  setTimeout(() => {
+    scene.classList.remove('enter');
+    scene.classList.add('sit');
+  }, 4200);
+
+  setTimeout(() => {
+    scene.classList.remove('sit');
+    scene.classList.add('sniff');
+  }, 5400);
+
+  setTimeout(() => {
+    scene.classList.remove('sniff');
+    scene.classList.add('grab');
+    placeBoneAtMouth();
+  }, 7000);
+
+  setTimeout(() => {
+    scene.classList.add('exit');
+    followMouth(1700);
+  }, 7250);
+
+  setTimeout(() => {
+    scene.remove();
+  }, 9300);
+
+  window.addEventListener('resize', placeBoneAtMouth);
+});
+</script>
