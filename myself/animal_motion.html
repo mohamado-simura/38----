@@ -1,0 +1,200 @@
+<div class="migration-scene">
+  <div class="map-wrap">
+    <svg class="map" viewBox="0 0 600 600">
+      <!-- map shape -->
+    </svg>
+
+    <div class="marker marker-1"></div>
+    <div class="marker marker-2"></div>
+    <div class="marker marker-3"></div>
+  </div>
+
+  <img src="file:///C:/Users/moham/Downloads/3425309_60011.svg" class="animal flamingo" alt="">
+  <img src="seagull.svg" class="animal seagull" alt="">
+  <img src="whale.svg" class="animal whale" alt="">
+  <img src="turtle.svg" class="animal turtle" alt="">
+  <img src="butterfly.svg" class="animal butterfly" alt="">
+  <img src="whale-shark.svg" class="animal shark" alt="">
+</div>
+
+<style>
+    .migration-scene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.animal {
+  position: absolute;
+  width: 220px;
+  opacity: 0.95;
+  transform-origin: center center;
+}
+
+.flamingo {
+  top: 8%;
+  left: 10%;
+  animation: float1 6s ease-in-out infinite;
+}
+
+.seagull {
+  top: 10%;
+  right: 10%;
+  animation: float2 5s ease-in-out infinite;
+}
+
+.whale {
+  top: 38%;
+  left: 12%;
+  animation: float3 8s ease-in-out infinite;
+}
+
+.turtle {
+  top: 36%;
+  right: 10%;
+  animation: float4 7s ease-in-out infinite;
+}
+
+.butterfly {
+  bottom: 12%;
+  left: 12%;
+  animation: float5 4s ease-in-out infinite;
+}
+
+.shark {
+  bottom: 12%;
+  right: 10%;
+  animation: float6 7s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  50% { transform: translateY(-8px) translateX(8px) rotate(2deg); }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(10px) translateY(-6px); }
+}
+
+@keyframes float4 {
+  0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+  50% { transform: translateX(-8px) translateY(-5px) rotate(-1deg); }
+}
+
+@keyframes float5 {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-10px) rotate(4deg); }
+}
+
+@keyframes float6 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-12px); }
+}
+
+.map-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map {
+  width: 320px;
+  opacity: 0.9;
+}
+
+.marker {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #7ed957;
+}
+
+.marker::before,
+.marker::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.marker::before {
+  background: rgba(126, 217, 87, 0.3);
+  transform: scale(1);
+  animation: pulse 2s infinite;
+}
+
+.marker::after {
+  background: rgba(126, 217, 87, 0.15);
+  transform: scale(1);
+  animation: pulse 2s infinite 0.6s;
+}
+
+.marker-1 {
+  top: 32%;
+  left: 48%;
+  background: #7ed957;
+}
+
+.marker-2 {
+  top: 48%;
+  left: 55%;
+  background: #f0b04d;
+}
+
+.marker-3 {
+  top: 60%;
+  left: 50%;
+  background: #53b7ff;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+  gsap.to(".flamingo", {
+    y: -12,
+    rotation: 2,
+    duration: 3,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut"
+  });
+
+  gsap.to(".whale", {
+    x: 12,
+    y: -6,
+    duration: 4,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut"
+  });
+
+  gsap.to(".marker", {
+    scale: 1.08,
+    duration: 1.4,
+    repeat: -1,
+    yoyo: true,
+    stagger: 0.3,
+    ease: "sine.inOut"
+  });
+</script>

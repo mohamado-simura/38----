@@ -1,0 +1,159 @@
+<div id="fs-sakura-fall" aria-hidden="true"></div>
+
+<style>
+  #fs-sakura-fall {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 20;
+  }
+
+  #fs-sakura-fall .fs-sakura-petal {
+    position: absolute;
+    top: -60px;
+    left: 0;
+    width: 14px;
+    height: 9px;
+    opacity: 0.8;
+    border-radius: 70% 30% 70% 30%;
+    background: linear-gradient(135deg, #ffd7e5 0%, #ffc2d8 55%, #ffabc9 100%);
+    box-shadow: inset -1px -1px 2px rgba(255, 255, 255, 0.6);
+    transform-origin: center center;
+    will-change: transform, opacity;
+  }
+
+  #fs-sakura-fall .fs-sakura-petal::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 30% 35%, rgba(255,255,255,0.7), rgba(255,255,255,0) 45%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #fs-sakura-fall {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById("fs-sakura-fall");
+  if (!root) return;
+  if (root.dataset.loaded === "yes") return;
+  root.dataset.loaded = "yes";
+
+  var PETAL_COUNT = 16;
+  var petals = [];
+  var vw = window.innerWidth;
+  var vh = window.innerHeight;
+  var running = true;
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function getFooterTop() {
+    var footer = document.querySelector("footer, .footer, #footer, .fs-footer");
+    if (!footer) return vh + window.scrollY;
+    var rect = footer.getBoundingClientRect();
+    return rect.top + window.scrollY;
+  }
+
+  function createPetal() {
+    var el = document.createElement("span");
+    el.className = "fs-sakura-petal";
+    root.appendChild(el);
+
+    var petal = {
+      el: el,
+      x: random(0, vw),
+      y: random(-vh, -20),
+      size: random(9, 18),
+      speedY: random(0.35, 0.9),
+      speedX: random(-0.2, 0.2),
+      sway: random(0.15, 0.7),
+      swaySpeed: random(0.008, 0.018),
+      rot: random(0, 360),
+      rotSpeed: random(-0.6, 0.6),
+      drift: random(0, Math.PI * 2),
+      opacity: random(0.5, 0.9)
+    };
+
+    petal.el.style.width = petal.size + "px";
+    petal.el.style.height = petal.size * 0.68 + "px";
+    petal.el.style.opacity = petal.opacity;
+
+    petals.push(petal);
+  }
+
+  function resetPetal(petal, fromTopOnly) {
+    petal.x = random(0, vw);
+    petal.y = fromTopOnly ? random(-100, -20) : random(-vh, -20);
+    petal.size = random(9, 18);
+    petal.speedY = random(0.35, 0.9);
+    petal.speedX = random(-0.2, 0.2);
+    petal.sway = random(0.15, 0.7);
+    petal.swaySpeed = random(0.008, 0.018);
+    petal.rot = random(0, 360);
+    petal.rotSpeed = random(-0.6, 0.6);
+    petal.drift = random(0, Math.PI * 2);
+    petal.opacity = random(0.5, 0.9);
+
+    petal.el.style.width = petal.size + "px";
+    petal.el.style.height = petal.size * 0.68 + "px";
+    petal.el.style.opacity = petal.opacity;
+  }
+
+  function update() {
+    if (!running) return;
+
+    var scrollY = window.scrollY || window.pageYOffset;
+    var footerTop = getFooterTop();
+    var fadeStart = footerTop - 180;
+
+    for (var i = 0; i < petals.length; i++) {
+      var p = petals[i];
+
+      p.y += p.speedY;
+      p.drift += p.swaySpeed;
+      p.x += p.speedX + Math.sin(p.drift) * p.sway;
+      p.rot += p.rotSpeed;
+
+      var pageY = p.y + scrollY;
+      var opacity = p.opacity;
+
+      if (pageY > fadeStart) {
+        var remain = (footerTop - pageY) / 180;
+        if (remain < 0) remain = 0;
+        if (remain > 1) remain = 1;
+        opacity = p.opacity * remain;
+      }
+
+      p.el.style.opacity = opacity;
+      p.el.style.transform =
+        "translate(" + p.x + "px," + p.y + "px) rotate(" + p.rot + "deg)";
+
+      if (pageY > footerTop || p.x < -60 || p.x > vw + 60) {
+        resetPetal(p, true);
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  function onResize() {
+    vw = window.innerWidth;
+    vh = window.innerHeight;
+  }
+
+  for (var i = 0; i < PETAL_COUNT; i++) {
+    createPetal();
+  }
+
+  window.addEventListener("resize", onResize, { passive: true });
+  requestAnimationFrame(update);
+})();
+</script>

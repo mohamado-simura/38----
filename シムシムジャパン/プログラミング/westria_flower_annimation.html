@@ -1,0 +1,243 @@
+<!-- **フッターフリーダイヤル（フリーパーツ）↑↑ -->
+
+<!-- Random Wisteria Animation Start -->
+<div class="ws-wrap" aria-hidden="true"></div>
+
+<style>
+  .ws-wrap,
+  .ws-wrap * {
+    box-sizing: border-box;
+  }
+
+  .ws-wrap {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 999;
+  }
+
+  .ws-flower {
+    position: absolute;
+    top: -220px;
+    width: 68px;
+    height: 190px;
+    opacity: 0;
+    transform-origin: top center;
+    will-change: transform, opacity;
+    animation: ws-drop-fade var(--duration, 9s) ease-in-out forwards;
+  }
+
+  .ws-vine {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 165px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom,
+      rgba(70, 120, 70, 0.35),
+      rgba(70, 120, 70, 0.05)
+    );
+    border-radius: 999px;
+  }
+
+  .ws-petal {
+    position: absolute;
+    width: 18px;
+    height: 24px;
+    background: linear-gradient(
+      145deg,
+      rgba(244, 237, 255, 0.5) 0%,
+      rgba(201, 167, 237, 0.5) 45%,
+      rgba(143, 95, 188, 0.5) 100%
+    );
+    border-radius: 70% 30% 65% 35% / 65% 35% 70% 30%;
+    box-shadow:
+      inset -3px -4px 6px rgba(96, 55, 130, 0.1),
+      inset 3px 3px 6px rgba(255, 255, 255, 0.24),
+      0 3px 5px rgba(70, 45, 100, 0.1);
+  }
+
+  .ws-petal::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 7px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    transform: rotate(-25deg);
+  }
+
+  .ws-p1  { top: 14px;  left: 23px; transform: rotate(-18deg) scale(1.05); }
+  .ws-p2  { top: 30px;  left: 9px;  transform: rotate(25deg); }
+  .ws-p3  { top: 38px;  left: 36px; transform: rotate(-32deg); }
+  .ws-p4  { top: 58px;  left: 16px; transform: rotate(18deg) scale(0.95); }
+  .ws-p5  { top: 68px;  left: 36px; transform: rotate(-20deg) scale(0.92); }
+  .ws-p6  { top: 88px;  left: 22px; transform: rotate(15deg) scale(0.85); }
+  .ws-p7  { top: 104px; left: 34px; transform: rotate(-18deg) scale(0.78); }
+  .ws-p8  { top: 120px; left: 24px; transform: rotate(12deg) scale(0.70); }
+  .ws-p9  { top: 137px; left: 31px; transform: rotate(-14deg) scale(0.58); }
+  .ws-p10 { top: 150px; left: 27px; transform: rotate(8deg) scale(0.48); }
+
+  @keyframes ws-drop-fade {
+    0% {
+      transform: translate3d(0, -120px, 0) scale(var(--scale)) rotate(-2deg);
+      opacity: 0;
+    }
+
+    18% {
+      opacity: var(--opacity);
+    }
+
+    42% {
+      transform: translate3d(0, var(--stopY), 0) scale(var(--scale)) rotate(2deg);
+      opacity: var(--opacity);
+    }
+
+    68% {
+      transform: translate3d(var(--driftX), calc(var(--stopY) + 6px), 0) scale(var(--scale)) rotate(-1deg);
+      opacity: var(--opacity);
+    }
+
+    100% {
+      transform: translate3d(calc(var(--driftX) * 1.4), calc(var(--stopY) + 10px), 0) scale(var(--scale)) rotate(1deg);
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ws-flower {
+      width: 54px;
+      height: 155px;
+    }
+
+    .ws-vine {
+      height: 135px;
+    }
+
+    .ws-petal {
+      width: 15px;
+      height: 20px;
+    }
+
+    .ws-p1  { top: 12px; left: 20px; }
+    .ws-p2  { top: 26px; left: 8px; }
+    .ws-p3  { top: 32px; left: 31px; }
+    .ws-p4  { top: 49px; left: 14px; }
+    .ws-p5  { top: 57px; left: 31px; }
+    .ws-p6  { top: 74px; left: 19px; }
+    .ws-p7  { top: 88px; left: 29px; }
+    .ws-p8  { top: 101px; left: 21px; }
+    .ws-p9  { top: 116px; left: 27px; }
+    .ws-p10 { top: 127px; left: 23px; }
+  }
+
+  @media (max-width: 480px) {
+    .ws-flower {
+      width: 46px;
+      height: 135px;
+    }
+
+    .ws-vine {
+      height: 115px;
+      width: 1.5px;
+    }
+
+    .ws-petal {
+      width: 13px;
+      height: 17px;
+    }
+
+    .ws-petal::before {
+      width: 5px;
+      height: 7px;
+      top: 4px;
+      left: 4px;
+    }
+
+    .ws-p1  { top: 10px; left: 17px; }
+    .ws-p2  { top: 22px; left: 7px; }
+    .ws-p3  { top: 28px; left: 26px; }
+    .ws-p4  { top: 42px; left: 12px; }
+    .ws-p5  { top: 49px; left: 26px; }
+    .ws-p6  { top: 63px; left: 16px; }
+    .ws-p7  { top: 75px; left: 25px; }
+    .ws-p8  { top: 86px; left: 18px; }
+    .ws-p9  { top: 99px; left: 23px; }
+    .ws-p10 { top: 109px; left: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ws-flower {
+      animation: none !important;
+      opacity: 0.35 !important;
+      transform: translateY(80px) scale(0.9) !important;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const wrap = document.querySelector('.ws-wrap');
+    if (!wrap) return;
+
+    const mobile = window.matchMedia('(max-width: 768px)');
+
+    function createFlower() {
+      const flower = document.createElement('div');
+      flower.className = 'ws-flower';
+
+      const vine = document.createElement('div');
+      vine.className = 'ws-vine';
+      flower.appendChild(vine);
+
+      for (let i = 1; i <= 10; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'ws-petal ws-p' + i;
+        flower.appendChild(petal);
+      }
+
+      const scale = (Math.random() * 0.7 + 0.55).toFixed(2);       // 0.55 - 1.25
+      const opacity = (Math.random() * 0.15 + 0.35).toFixed(2);    // 0.35 - 0.50
+      const stopY = (Math.random() * 160 + 60).toFixed(0) + 'px';  // 60 - 220px
+      const driftX = (Math.random() * 20 - 10).toFixed(0) + 'px';  // -10 to 10
+      const duration = (Math.random() * 3 + 7).toFixed(2) + 's';   // 7 - 10s
+
+      const safeMargin = mobile.matches ? 8 : 6;
+      const left = (Math.random() * (100 - safeMargin * 2) + safeMargin).toFixed(2) + 'vw';
+
+      flower.style.left = left;
+      flower.style.setProperty('--scale', scale);
+      flower.style.setProperty('--opacity', opacity);
+      flower.style.setProperty('--stopY', stopY);
+      flower.style.setProperty('--driftX', driftX);
+      flower.style.setProperty('--duration', duration);
+
+      wrap.appendChild(flower);
+
+      setTimeout(() => {
+        flower.remove();
+      }, parseFloat(duration) * 1000 + 200);
+    }
+
+    function startAnimation() {
+      const firstCount = mobile.matches ? 3 : 5;
+      const intervalTime = mobile.matches ? 1600 : 1100;
+
+      for (let i = 0; i < firstCount; i++) {
+        setTimeout(createFlower, i * 450);
+      }
+
+      setInterval(createFlower, intervalTime);
+    }
+
+    startAnimation();
+  })();
+</script>
+<!-- Random Wisteria Animation End -->

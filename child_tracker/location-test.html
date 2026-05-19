@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOS Button</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      text-align: center;
+      padding: 20px;
+    }
+
+    button {
+      background: red;
+      color: white;
+      border: none;
+      padding: 20px 40px;
+      font-size: 24px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>SOS Emergency Button</h1>
+  <button onclick="sendSOS()">SOS</button>
+  <p id="status">Press the button to send your current location by SMS.</p>
+
+  <script>
+    async function sendSOS() {
+      const status = document.getElementById("status");
+
+      if (!navigator.geolocation) {
+        status.textContent = "Geolocation is not supported by your browser.";
+        return;
+      }
+
+      status.textContent = "Getting your location...";
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          status.textContent = "Sending SOS message...";
+
+          try {
+            const response = await fetch("http://localhost:3000/sos", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ lat, lng }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              status.textContent = "SOS SMS sent successfully.";
+            } else {
+              status.textContent = "Failed to send SOS: " + (data.error || "Unknown error");
+            }
+          } catch (error) {
+            status.textContent = "Error sending SOS: " + error.message;
+          }
+        },
+        (error) => {
+          status.textContent = "Location access failed: " + error.message;
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        }
+      );
+    }
+  </script>
+</body>
+</html>
