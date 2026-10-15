@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>シムシムフェミオイル | SimSim Japan</title>
+  <style>
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      color: #514653;
+      background: #fff;
+      font-family: 'Helvetica Neue', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      line-height: 1.9
+    }
+
+    .page {
+      max-width: 900px;
+      margin: auto
+    }
+
+    .hero {
+      position: relative;
+      background: #eee8f7
+    }
+
+    .hero img {
+      display: block;
+      width: 100%
+    }
+
+    .intro {
+      padding: 52px 24px;
+      text-align: center;
+      background: linear-gradient(#fff, #fbf8fc)
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: .24em;
+      color: #a18dac
+    }
+
+    .intro h1 {
+      font-size: clamp(27px, 5vw, 43px);
+      line-height: 1.5;
+      letter-spacing: .07em;
+      font-weight: 500;
+      margin: 10px 0 22px
+    }
+
+    .intro p {
+      max-width: 670px;
+      margin: 0 auto;
+      font-size: 15px
+    }
+
+    .picture img {
+      display: block;
+      width: 100%
+    }
+
+    .section {
+      padding: 55px 28px;
+      text-align: center
+    }
+
+    .section h2 {
+      font-size: clamp(23px, 4vw, 32px);
+      line-height: 1.5;
+      font-weight: 500;
+      letter-spacing: .055em;
+      margin: 12px 0 20px
+    }
+
+    .section p {
+      max-width: 690px;
+      margin: 0 auto 20px
+    }
+
+    .section .accent {
+      color: #9b779d
+    }
+
+    .effects {
+      background: #f7f2f9
+    }
+
+    .effect-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 32px auto 0;
+      max-width: 780px
+    }
+
+    .effect {
+      padding: 24px 12px;
+      border: 1px solid #e7dbe7;
+      background: #fff;
+      border-radius: 14px
+    }
+
+    .effect .symbol {
+      font-size: 28px;
+      color: #a085af
+    }
+
+    .effect h3 {
+      font-size: 17px;
+      margin: 6px 0
+    }
+
+    .effect p {
+      font-size: 13px;
+      line-height: 1.8;
+      margin: 0
+    }
+
+    .ingredients {
+      background: #fcfaf8
+    }
+
+    .ingredient-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin: 30px auto;
+      max-width: 740px;
+      text-align: left
+    }
+
+    .ingredient {
+      border: 1px solid #e9e0d8;
+      border-radius: 12px;
+      background: #fff;
+      padding: 20px
+    }
+
+    .ingredient h3 {
+      font-size: 16px;
+      margin: 0 0 6px;
+      color: #826b7b
+    }
+
+    .ingredient p {
+      font-size: 13px;
+      margin: 0
+    }
+
+    .note {
+      font-size: 12px;
+      color: #897d86
+    }
+
+    .bottom {
+      padding: 48px 26px 65px;
+      text-align: center;
+      background: #eee7f6
+    }
+
+    .bottom h2 {
+      font-weight: 500;
+      font-size: 26px
+    }
+
+    .bottom p {
+      font-size: 15px
+    }
+
+    .footer {
+      font-size: 12px;
+      text-align: center;
+      padding: 14px;
+      color: #9a889d
+    }
+
+    @media(max-width:600px) {
+
+      .intro,
+      .section {
+        padding: 38px 18px
+      }
+
+      .effect-grid {
+        gap: 7px
+      }
+
+      .effect {
+        padding: 14px 8px
+      }
+
+      .effect h3 {
+        font-size: 14px
+      }
+
+      .effect p {
+        font-size: 11px
+      }
+
+      .ingredient-grid {
+        grid-template-columns: 1fr;
+        gap: 10px
+      }
+    }
+
+    /* Refined visual storytelling */
+    .page {
+      overflow: hidden
+    }
+
+    .intro {
+      padding: 63px 28px 60px
+    }
+
+    .intro .care-tag {
+      display: inline-block;
+      border: 1px solid #bb9cb6;
+      border-radius: 100px;
+      padding: 6px 20px;
+      letter-spacing: .11em;
+      font-size: 13px;
+      color: #8c638e;
+      background: #fff;
+      margin: 12px 0 8px
+    }
+
+    .intro h1 {
+      letter-spacing: .025em;
+      font-size: clamp(27px, 5vw, 43px)
+    }
+
+    .intro .hero-emphasis {
+      font-size: 17px;
+      color: #86678d;
+      font-weight: 600;
+      margin-bottom: 20px
+    }
+
+    .visual-story {
+      position: relative;
+      overflow: hidden
+    }
+
+    .visual-story img {
+      width: 100%;
+      height: auto;
+      display: block
+    }
+
+    .visual-story .visual-copy {
+      position: absolute;
+      left: 7%;
+      right: 7%;
+      top: 6%;
+      text-align: center;
+      z-index: 1;
+      color: #806b62;
+      text-shadow: 0 2px 7px rgba(255, 255, 255, .98), 0 0 18px rgba(255, 255, 255, .95)
+    }
+
+    .visual-story .visual-copy .en {
+      font-size: 11px;
+      letter-spacing: .24em;
+      font-weight: 600;
+      text-transform: uppercase
+    }
+
+    .visual-story .visual-copy h2 {
+      font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+      font-weight: 700;
+      font-size: clamp(22px, 4.4vw, 36px);
+      line-height: 1.55;
+      margin: 8px 0 6px
+    }
+
+    .visual-story .visual-copy p {
+      font-size: clamp(12px, 1.75vw, 15px);
+      line-height: 1.8;
+      margin: 0 auto;
+      max-width: 600px
+    }
+
+    .visual-story .mini-note {
+      position: absolute;
+      bottom: 3%;
+      right: 4%;
+      font-size: 11px;
+      color: #887d75;
+      background: rgba(255, 255, 255, .78);
+      padding: 4px 11px;
+      border-radius: 20px
+    }
+
+    .visual-story.rose .visual-copy {
+      top: 9%;
+      color: #927083
+    }
+
+    .visual-story.apple .visual-copy {
+      top: 4%;
+    }
+
+    .scope {
+      background: #f7f2f8;
+      padding: 18px 22px;
+      text-align: center;
+      color: #775f80;
+      line-height: 1.8;
+      font-size: 14px;
+      border-top: 1px solid #eee5ef;
+      border-bottom: 1px solid #eee5ef
+    }
+
+    .scope strong {
+      color: #6f4f78
+    }
+
+    .section .target {
+      font-size: 14px;
+      font-weight: 600;
+      color: #916f94
+    }
+
+    @media(max-width:600px) {
+      .intro {
+        padding: 42px 20px
+      }
+
+      .intro .hero-emphasis {
+        font-size: 15px
+      }
+
+      .visual-story .visual-copy {
+        left: 5%;
+        right: 5%
+      }
+
+      .visual-story .visual-copy h2 {
+        font-size: clamp(18px, 5vw, 26px)
+      }
+
+      .visual-story .visual-copy p {
+        font-size: 11px
+      }
+
+      .visual-story .visual-copy .en {
+        font-size: 9px
+      }
+
+      .visual-story.apple .mini-note {
+        font-size: 7px;
+        line-height: 1.35;
+        right: 2%;
+        bottom: 2%;
+        padding: 3px 6px;
+        max-width: 96%;
+        white-space: nowrap
+      }
+
+      .visual-story.rose .mini-note {
+        font-size: 9px
+      }
+
+      .scope {
+        font-size: 12px;
+        padding: 16px
+      }
+    }
+
+    /* Gentle, conversion-friendly motion. Content is readable without JS. */
+    @keyframes femiFloat {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-9px)
+      }
+    }
+
+    @keyframes femiShine {
+      0% {
+        transform: translateX(-170%) rotate(18deg)
+      }
+
+      100% {
+        transform: translateX(330%) rotate(18deg)
+      }
+    }
+
+    @keyframes femiBreathe {
+
+      0%,
+      100% {
+        opacity: .42;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .7;
+        transform: scale(1.05)
+      }
+    }
+
+    .hero {
+      overflow: hidden;
+      isolation: isolate
+    }
+
+    .hero img {
+      animation: femiFloat 7s ease-in-out infinite;
+      will-change: transform
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: -25% auto -25% -36%;
+      width: 22%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .19), transparent);
+      transform: rotate(18deg);
+      animation: femiShine 11s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1
+    }
+
+    .visual-story {
+      isolation: isolate
+    }
+
+    .visual-story img {
+      transition: transform 1.5s cubic-bezier(.22, .61, .36, 1)
+    }
+
+    .visual-story:hover img {
+      transform: scale(1.028)
+    }
+
+    .care-tag {
+      animation: femiBreathe 5s ease-in-out infinite
+    }
+
+    .effect,
+    .ingredient {
+      transition: transform .4s ease, box-shadow .4s ease, border-color .4s ease
+    }
+
+    .effect:hover,
+    .ingredient:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(107, 76, 113, .09);
+      border-color: #d5bfdb
+    }
+
+    /* Only apply scroll reveals when the browser supports observers */
+    html.motion-enabled .reveal {
+      opacity: 0;
+      transform: translateY(23px);
+      transition: opacity .85s ease, transform .85s cubic-bezier(.22, .61, .36, 1)
+    }
+
+    html.motion-enabled .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    html.motion-enabled .effect.reveal,
+    html.motion-enabled .ingredient.reveal {
+      transition-delay: var(--reveal-delay, 0ms)
+    }
+
+    html.motion-enabled .visual-copy.reveal {
+      transform: translateY(15px)
+    }
+
+    html.motion-enabled .visual-copy.reveal.is-visible {
+      transform: translateY(0)
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      .hero img,
+      .hero::after,
+      .care-tag {
+        animation: none !important
+      }
+
+      .reveal,
+      .effect,
+      .ingredient,
+      .visual-story img {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important
+      }
+
+      html {
+        scroll-behavior: auto !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="intro">
+      <div class="eyebrow">SimSim Femi Oil &#183; Floral Scent</div><span class="care-tag">女性のデリケートゾーンケア</span>
+      <h1>デリケートゾーンの外側の肌に、<br />やさしいうるおい習慣。</h1>
+      <p class="hero-emphasis">外陰部の外側の肌を保湿する、フェミニンケアオイル。</p>
+      <p>乾燥が気になる女性のデリケートゾーン周辺の肌に、植物由来の保湿成分でうるおいを。肌の水分・油分を補い保ち、しっとりなめらかに整えます。自分のために続ける、毎日のフェミニンケアに。</p>
+    </section>
+    <section class="scope"><strong>デリケートゾーンの外側の肌に使う保湿オイルです。</strong><br />膣内・粘膜には使用しません。</section>
+    <section class="visual-story apple"><img alt="みずみずしさと乾燥のイメージ" src="https://sesameoil.itembox.design/item/femioil_femi-hero.jpg" />
+      <div class="visual-copy">
+        <div class="en">DAILY MOISTURE CARE</div>
+        <h2>デリケートゾーンの外側に、<br />うるおいを。</h2>
+        <p>乾燥しやすい肌に、毎日の保湿習慣。<br />しっとり、なめらかな肌へ。</p>
+      </div>
+      <div class="mini-note">※りんごは保湿イメージです。配合原料ではありません。</div>
+    </section>
+    <section class="section effects">
+      <div class="eyebrow">MOISTURE CARE</div>
+      <h2>乾燥が気になる肌に、<br /><span class="accent">3つのうるおいケア</span></h2>
+      <p>外陰部の外側など、乾燥が気になるデリケートゾーン周辺の肌のために。毎日の保湿でうるおいを与え、肌をすこやかに保ちます。</p>
+      <div class="effect-grid">
+        <div class="effect">
+          <div class="symbol">&#9676;</div>
+          <h3>うるおい補給</h3>
+          <p>乾燥した肌にうるおいを与える。</p>
+        </div>
+        <div class="effect">
+          <div class="symbol">&#9831;</div>
+          <h3>乾燥を防ぐ</h3>
+          <p>肌の水分・油分を補い、保つ。</p>
+        </div>
+        <div class="effect">
+          <div class="symbol">&#10023;</div>
+          <h3>なめらかに</h3>
+          <p>肌をやわらげ、なめらかに整える。</p>
+        </div>
+      </div>
+    </section>
+    <section class="picture"><img alt="植物と花のイメージビジュアル" src="https://sesameoil.itembox.design/item/femioil_botanical-visual.jpg" /></section>
+    <section class="section ingredients">
+      <div class="eyebrow">BOTANICAL MOISTURE</div>
+      <h2>4種の植物由来<span class="accent">保湿成分</span></h2>
+      <p>セサミ、アムラ、カレンデュラ、茶の実。植物由来のオイルとエキスを組み合わせた保湿ケア。</p>
+      <div class="ingredient-grid">
+        <div class="ingredient">
+          <h3>セサミ｜ゴマ種子油</h3>
+          <p>肌にうるおいを与え、乾燥を防ぎます。</p>
+        </div>
+        <div class="ingredient">
+          <h3>アムラ｜アンマロクエキス</h3>
+          <p>うるおいを与え、肌をすこやかに保ちます。</p>
+        </div>
+        <div class="ingredient">
+          <h3>カレンデュラ｜トウキンセンカ花エキス</h3>
+          <p>肌を保湿し、しっとりと整えます。</p>
+        </div>
+        <div class="ingredient">
+          <h3>茶の実｜チャ種子油</h3>
+          <p>肌の水分・油分を補い、保ちます。</p>
+        </div>
+      </div>
+      <p class="note">※すべて保湿成分。植物写真はイメージです。</p>
+    </section>
+    <section class="visual-story rose"><img alt="ローズをイメージした花々" src="https://sesameoil.itembox.design/item/femioil_floral-visual.jpg" />
+      <div class="visual-copy">
+        <div class="en">FLORAL SCENT</div>
+        <h2>ローズを思わせる<br />やわらかな香り。</h2>
+        <p>ローズ・ゼラニウム・クラリセージの精油を着香成分に。<br />毎日のフェミニンケアを、花々の香りとともに。</p>
+      </div>
+      <div class="mini-note">※花の写真は香りのイメージです。</div>
+    </section>
+    <section class="section">
+      <div class="eyebrow">FLORAL SCENT</div>
+      <h2>花々の香りを楽しむ、<br /><span class="accent">自分をいたわる時間。</span></h2>
+      <p>ローズ油、オニサルビア油（クラリセージ）、ニオイテンジクアオイ油（ゼラニウム）を着香成分として配合。華やかさとやさしさを感じるフローラルな香りに包まれながら、毎日の保湿ケアを。</p>
+    </section>
+    <section class="bottom">
+      <div class="eyebrow">DAILY SELF CARE</div>
+      <h2>デリケートゾーンの外側に、<br />自分をいたわる保湿ケア。</h2>
+      <p>入浴後など、清潔な外陰部の外側の肌に少量をやさしくなじませて。<br />乾燥が気になる肌をしっとりなめらかに整えます。<br /><strong>※膣内・粘膜への使用は想定していません。</strong></p>
+    </section>
+     </main>
+  <script>
+    (function () {
+      if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const targets = document.querySelectorAll('.intro .eyebrow,.intro .care-tag,.intro h1,.intro p,.scope,.section>.eyebrow,.section>h2,.section>p,.effect,.ingredient,.visual-copy,.bottom>.eyebrow,.bottom>h2,.bottom>p');
+      targets.forEach((el, i) => {
+        el.classList.add('reveal');
+        if (el.classList.contains('effect') || el.classList.contains('ingredient')) {
+          const group = el.parentElement;
+          el.style.setProperty('--reveal-delay', ((Array.from(group.children).indexOf(el) % 4) * 90) + 'ms');
+        }
+      });
+      document.documentElement.classList.add('motion-enabled');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(({ target, isIntersecting }) => {
+          if (isIntersecting) { target.classList.add('is-visible'); observer.unobserve(target) }
+        });
+      }, { threshold: .1, rootMargin: '0px 0px -25px 0px' });
+      targets.forEach(el => observer.observe(el));
+    })();
+  </script>
+</body>
+
+</html>
